@@ -1,0 +1,24 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "module": "es6",
+        "target": "esnext",
+        "lib": ["esnext"],
+
+        "composite": true,
+
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
+
+        "strict": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "noUncheckedSideEffectImports": true,
+        "moduleDetection": "auto",
+        "skipLibCheck": true
+    }
+}

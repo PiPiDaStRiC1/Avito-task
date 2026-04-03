@@ -1,14 +1,7 @@
 import { useState } from "react";
 import { Search, AsideFilters, AdCard } from "@/components";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-
-interface AdItem {
-    id: number;
-    category: "Авто" | "Недвижимость" | "Электроника";
-    title: string;
-    price: number;
-    needsRevision: boolean;
-}
+import type { AdItem } from "@shared/types";
 
 const ads: AdItem[] = [
     { id: 1, category: "Электроника", title: "Наушники", price: 2990, needsRevision: false },
