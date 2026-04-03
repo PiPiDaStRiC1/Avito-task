@@ -1,10 +1,41 @@
 @import "tailwindcss";
 
 :root {
-    --main-bg: #F7F5F8;
-    --gray-500: #707176;
+    --main-bg: #f1eef4;
+    --panel-bg: #f7f6f8;
+    --card-bg: #fcfcfd;
+    --text-main: #303338;
+    --text-muted: #7b8089;
+    --soft-border: #e3e4e8;
+
+    --accent: #4b9fff;
+    --accent-soft: #ecf4ff;
+
+    --warning-bg: #fff5e6;
+    --warning-text: #d69121;
+
+    --chip-bg: #f3f4f6;
+    --chip-border: #d8dbe1;
+
+    --image-bg: #f0f0f2;
+    --image-stroke: #b8bcc4;
+
+    --toggle-off: #d2d5da;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
+    margin: 0;
     background-color: var(--main-bg);
+    color: var(--text-main);
+    font-family: "Manrope", "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select {
+    font: inherit;
 }
