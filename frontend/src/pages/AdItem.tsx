@@ -1,7 +1,9 @@
 import { Edit3 } from "lucide-react";
 import PlaceHolder from "@/assets/cover2.png";
+import { Link } from "react-router-dom";
 
 const mockedItem = {
+    id: "1",
     title: "MacBook Pro 16”",
     price: 64000,
     publishedAt: "10 марта 22:39",
@@ -27,13 +29,13 @@ export const AdItem = () => {
                     <h1 className="text-[31px] leading-none font-semibold tracking-[-0.02em]">
                         {mockedItem.title}
                     </h1>
-                    <button
-                        type="button"
-                        className="inline-flex h-9 items-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-sm font-medium text-white"
+                    <Link
+                        to={`/ads/${mockedItem.id}/edit`}
+                        className="cursor-pointer inline-flex h-9 items-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-sm font-medium text-white"
                     >
                         Редактировать
                         <Edit3 size={15} />
-                    </button>
+                    </Link>
                 </div>
 
                 <div className="text-right">

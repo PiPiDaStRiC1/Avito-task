@@ -1,4 +1,4 @@
-import { Ads, AdItem } from "@/pages";
+import { Ads, AdItem, AdEdit } from "@/pages";
 import { Main } from "@/components";
 import { Routes, Route } from "react-router-dom";
 
@@ -11,6 +11,7 @@ function App() {
             <Route element={<Main />}>
                 <Route path="/ads" element={<Ads />} index />
                 <Route path="/ads/:id" element={<AdItem />} />
+                <Route path="/ads/:id/edit" element={<AdEdit />} />
             </Route>
         </Routes>
     );

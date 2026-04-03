@@ -21,7 +21,7 @@ export const AsideFilters = () => {
             <div className="bg-white rounded-lg p-3">
                 <h2 className="text-lg font-medium">Фильтры</h2>
                 <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
+                    <div className="select-none flex justify-between items-center">
                         <h3>Категория</h3>
                         {toggleFilters ? (
                             <ArrowUpIcon
@@ -40,7 +40,10 @@ export const AsideFilters = () => {
                     {toggleFilters && (
                         <div className="flex flex-col gap-1">
                             {categories.map((category) => (
-                                <label key={category.id} className="flex items-center gap-2">
+                                <label
+                                    key={category.id}
+                                    className="cursor-pointer select-none flex items-center gap-2"
+                                >
                                     <input type="checkbox" />
                                     <span>{category.name}</span>
                                 </label>
