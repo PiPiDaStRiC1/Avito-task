@@ -1,36 +1,106 @@
 import { Edit3 } from "lucide-react";
 import PlaceHolder from "@/assets/cover2.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api";
+import { categoryMap } from "@/lib/constants";
+import { AdItemSkeleton, ErrorState } from "@/components";
+import type { ItemListItem } from "@shared/types";
 
-const mockedItem = {
-    id: "1",
-    title: "MacBook Pro 16”",
-    price: 64000,
-    publishedAt: "10 марта 22:39",
-    updatedAt: "10 марта 23:12",
-    description:
-        'Продаю свой MacBook Pro 16" (2021) на чипе M1 Pro. Состояние отличное, работал бережно. Мощности хватает на всё: от сложного монтажа до кода, при этом ноутбук почти не греется.',
-    needsRevision: true,
-    missingFields: ["Цвет", "Состояние"],
-    characteristics: [
-        { label: "Тип", value: "Ноутбук" },
-        { label: "Бренд", value: "Apple" },
-        { label: "Модель", value: "M1 Pro" },
-        { label: "Цвет", value: "Серый" },
-        { label: "Состояние", value: "Б/У" },
-    ],
+const formatDate = (date: string) =>
+    new Date(date).toLocaleString("ru-RU", {
+        day: "2-digit",
+        month: "long",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+
+const getCharacteristics = (item: ItemListItem) => {
+    switch (item.category) {
+        case "electronics":
+            return [
+                { label: "Тип", value: item.params.type },
+                { label: "Бренд", value: item.params.brand },
+                { label: "Модель", value: item.params.model },
+                { label: "Цвет", value: item.params.color },
+                { label: "Состояние", value: item.params.condition },
+            ];
+        case "auto":
+            return [
+                { label: "Бренд", value: item.params.brand },
+                { label: "Модель", value: item.params.model },
+                { label: "Год", value: item.params.yearOfManufacture?.toString() },
+                { label: "Пробег", value: item.params.mileage?.toString() },
+                { label: "КПП", value: item.params.transmission },
+            ];
+        case "real_estate":
+            return [
+                { label: "Тип", value: item.params.type },
+                { label: "Адрес", value: item.params.address },
+                { label: "Площадь", value: item.params.area?.toString() },
+                { label: "Этаж", value: item.params.floor?.toString() },
+                { label: "Категория", value: categoryMap[item.category] },
+            ];
+        default:
+            return [];
+    }
 };
 
 export const AdItem = () => {
+    const { id } = useParams<{ id: string }>();
+
+    const {
+        data: item,
+        isLoading,
+        isError,
+        refetch,
+    } = useQuery<ItemListItem>({
+        queryKey: ["ad", id],
+        queryFn: () => apiClient.getAdById(id ?? ""),
+        enabled: Boolean(id),
+        staleTime: 10 * 60 * 1000,
+    });
+
+    if (isLoading) {
+        return <AdItemSkeleton />;
+    }
+
+    if (isError) {
+        return (
+            <ErrorState
+                title="Ошибка загрузки объявления"
+                message="Не получилось получить карточку объявления."
+                onRetry={() => void refetch()}
+            />
+        );
+    }
+
+    if (!item) {
+        return (
+            <ErrorState
+                title="Объявление не найдено"
+                message="Похоже, объявление было удалено или ссылка неверная."
+            />
+        );
+    }
+
+    const allCharacteristics = getCharacteristics(item);
+    const characteristics = allCharacteristics.filter((entry) => Boolean(entry.value));
+    const missingFields = allCharacteristics
+        .filter((entry) => !entry.value)
+        .map((entry) => entry.label);
+
+    const needsRevision = !item.description || missingFields.length > 0;
+
     return (
         <article className="flex flex-col gap-5 text-[var(--text-main)]">
             <header className="flex flex-col gap-4 border-b border-[var(--soft-border)] pb-5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
                 <div className="space-y-3">
                     <h1 className="text-[31px] leading-none font-semibold tracking-[-0.02em]">
-                        {mockedItem.title}
+                        {item.title}
                     </h1>
                     <Link
-                        to={`/ads/${mockedItem.id}/edit`}
+                        to={`/ads/${item.id}/edit`}
                         className="cursor-pointer inline-flex h-9 items-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-sm font-medium text-white"
                     >
                         Редактировать
@@ -40,11 +110,11 @@ export const AdItem = () => {
 
                 <div className="text-right">
                     <p className="text-[31px] leading-none font-semibold tracking-[-0.02em]">
-                        {mockedItem.price} ₽
+                        {item.price ?? "—"} ₽
                     </p>
                     <div className="mt-4 space-y-1 text-sm text-[var(--text-muted)]">
-                        <p>Опубликовано: {mockedItem.publishedAt}</p>
-                        <p>Отредактировано: {mockedItem.updatedAt}</p>
+                        <p>Опубликовано: {formatDate(item.createdAt)}</p>
+                        <p>Отредактировано: {formatDate(item.updatedAt)}</p>
                     </div>
                 </div>
             </header>
@@ -59,7 +129,7 @@ export const AdItem = () => {
                 </div>
 
                 <div className="col-span-2 space-y-6 xl:col-span-4">
-                    {mockedItem.needsRevision && (
+                    {needsRevision && (
                         <aside className="max-w-[512px] rounded-lg border border-[#ead7ba] bg-[var(--warning-bg)] px-4 py-3 shadow-lg">
                             <div className="flex items-start gap-3">
                                 <span className="mt-0.5 inline-flex h-4 w-4 flex-none items-center justify-center rounded-full bg-[#ffb84d] text-[10px] font-bold text-white">
@@ -73,7 +143,7 @@ export const AdItem = () => {
                                         У объявления не заполнены поля:
                                     </p>
                                     <ul className="mt-1.5 list-disc space-y-0.5 pl-5 text-sm text-[var(--text-main)]/80">
-                                        {mockedItem.missingFields.map((field) => (
+                                        {missingFields.map((field) => (
                                             <li key={field}>{field}</li>
                                         ))}
                                     </ul>
@@ -88,11 +158,11 @@ export const AdItem = () => {
                         </h2>
 
                         <dl className="grid max-w-[320px] grid-cols-[112px_minmax(0,1fr)] gap-x-6 gap-y-2 text-sm">
-                            {mockedItem.characteristics.map((item) => (
-                                <dl key={item.label} className="contents">
-                                    <dt className="text-[var(--text-muted)]">{item.label}</dt>
-                                    <dd className="text-[var(--text-main)]">{item.value}</dd>
-                                </dl>
+                            {characteristics.map((entry) => (
+                                <div key={entry.label} className="contents">
+                                    <dt className="text-[var(--text-muted)]">{entry.label}</dt>
+                                    <dd className="text-[var(--text-main)]">{entry.value}</dd>
+                                </div>
                             ))}
                         </dl>
                     </section>
@@ -103,7 +173,7 @@ export const AdItem = () => {
                         Описание
                     </h2>
                     <p className="max-w-[470px] text-sm leading-5 text-[var(--text-main)]/90">
-                        {mockedItem.description}
+                        {item.description ?? "Описание пока не добавлено."}
                     </p>
                 </section>
             </section>

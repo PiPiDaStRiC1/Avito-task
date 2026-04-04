@@ -1,4 +1,4 @@
-import { AutoItemParams, ElectronicsItemParams, RealEstateItemParams } from "./items";
+import type { AutoItemParams, ElectronicsItemParams, RealEstateItemParams } from "./adParams";
 
 export type ItemUpdateIn = {
     category: "auto" | "real_estate" | "electronics";

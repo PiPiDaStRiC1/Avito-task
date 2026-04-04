@@ -1,13 +1,16 @@
 import PlaceHolder from "@/assets/cover.png";
+import { memo } from "react";
 import { Link } from "react-router-dom";
-import type { AdItem } from "@shared/types";
+import { categoryMap } from "@/lib/constants";
+import type { ItemListItem } from "@shared/types";
 
 interface AdCardProps {
-    ad: AdItem;
+    ad: ItemListItem;
 }
 
-export const AdCard = ({ ad }: AdCardProps) => {
+export const AdCard = memo(({ ad }: AdCardProps) => {
     const { id, category, title, price, needsRevision } = ad;
+    const categoryName = categoryMap[category] || "Другое";
 
     return (
         <Link to={`/ads/${id}`} className="h-full">
@@ -22,7 +25,7 @@ export const AdCard = ({ ad }: AdCardProps) => {
 
                 <div className="z-10 flex flex-1 flex-col gap-2 px-3 pb-3 pt-2.5 -mt-2">
                     <span className="inline-flex w-fit rounded-md border border-[var(--chip-border)] bg-[var(--card-bg)] px-2 py-0.5 text-xs leading-4 text-[var(--text-muted)]">
-                        {category}
+                        {categoryName}
                     </span>
                     <h3 className="min-h-10 text-[15px] leading-5 font-medium text-[var(--text-main)]">
                         {title}
@@ -48,4 +51,4 @@ export const AdCard = ({ ad }: AdCardProps) => {
             </article>
         </Link>
     );
-};
+});

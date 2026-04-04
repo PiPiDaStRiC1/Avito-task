@@ -4,6 +4,9 @@ import { Routes, Route } from "react-router-dom";
 
 // TODO:
 // 1) не забыть сделать юнит-тесты с использование jest
+// 2) сделать дефолтные значения для фильтров в URL
+
+
 
 function App() {
     return (

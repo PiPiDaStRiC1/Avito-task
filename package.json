@@ -6,13 +6,14 @@
     "scripts": {
         "dev:frontend": "cd frontend && npm run dev",
         "dev:backend": "cd backend && npm run dev",
-        "dev": "npm run dev:frontend && npm run dev:backend"
+        "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "type": "module",
     "devDependencies": {
+        "concurrently": "^9.2.1",
         "typescript": "^6.0.2"
     }
 }
