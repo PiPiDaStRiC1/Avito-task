@@ -4,6 +4,7 @@ export {
     AsideFilters,
     AdCard,
     AdsSkeleton,
+    AdEditSkeleton,
     AdItemSkeleton,
     AIResponse,
     AITip,

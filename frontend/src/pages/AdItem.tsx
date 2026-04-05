@@ -1,4 +1,4 @@
-import { Edit3 } from "lucide-react";
+import { Edit3, ArrowLeft } from "lucide-react";
 import PlaceHolder from "@/assets/cover2.png";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -97,9 +97,17 @@ export const AdItem = () => {
         <article className="flex flex-col gap-5 text-[var(--text-main)]">
             <header className="flex flex-col gap-4 border-b border-[var(--soft-border)] pb-5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
                 <div className="space-y-3">
-                    <h1 className="text-[31px] leading-none font-semibold tracking-[-0.02em]">
-                        {item.title}
-                    </h1>
+                    <div className="flex items-center justify-center gap-2">
+                        <Link
+                            to="/ads"
+                            className="inline-flex items-center gap-1 text-sm text-[var(--text-muted)]"
+                        >
+                            <ArrowLeft size={15} />
+                        </Link>
+                        <h1 className="text-[31px] leading-none font-semibold tracking-[-0.02em]">
+                            {item.title}
+                        </h1>
+                    </div>
                     <Link
                         to={`/ads/${item.id}/edit`}
                         className="cursor-pointer inline-flex h-9 items-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-sm font-medium text-white"

@@ -80,7 +80,7 @@ export const ItemsGetInQuerySchema = z.object({
 export const ItemUpdateInSchema = z
     .object({
         category: CategorySchema,
-        title: z.string(),
+        title: z.string().trim().min(1, "Название должно быть заполнено"),
         description: z.string().optional(),
         price: z.number().min(0),
     })
