@@ -1,22 +1,21 @@
 import { Ads, AdItem, AdEdit } from "@/pages";
 import { Main } from "@/components";
 import { Routes, Route } from "react-router-dom";
-
-// TODO:
-// 1) не забыть сделать юнит-тесты с использование jest
-// 2) сделать дефолтные значения для фильтров в URL
-
+import { Toaster } from "react-hot-toast";
 
 
 function App() {
     return (
-        <Routes>
-            <Route element={<Main />}>
-                <Route path="/ads" element={<Ads />} index />
-                <Route path="/ads/:id" element={<AdItem />} />
-                <Route path="/ads/:id/edit" element={<AdEdit />} />
-            </Route>
-        </Routes>
+        <>
+            <Toaster toastOptions={{ duration: 1000 }} reverseOrder={false} />
+            <Routes>
+                <Route element={<Main />}>
+                    <Route path="/ads" element={<Ads />} index />
+                    <Route path="/ads/:id" element={<AdItem />} />
+                    <Route path="/ads/:id/edit" element={<AdEdit />} />
+                </Route>
+            </Routes>
+        </>
     );
 }
 

@@ -5,16 +5,17 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AITip, AIResponse, AdEditSkeleton, ErrorState, FormField, FormInput } from "@/components";
 import { apiClient } from "@/lib/api";
 import { ItemUpdateInSchema, type ItemUpdateIn } from "@shared/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, useWatch } from "react-hook-form";
+import { AutoParamsFields, ElectronicsParamsFields, RealEstateParamsFields } from "@/components/ui";
+import { useAI } from "@/hooks";
+import toast from "react-hot-toast";
 import type { ItemListItem } from "@shared/types";
 import type {
     AutoItemParams,
     ElectronicsItemParams,
     RealEstateItemParams,
 } from "@shared/types/adParams";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
-import { AutoParamsFields, ElectronicsParamsFields, RealEstateParamsFields } from "@/components/ui";
-import { useAI } from "@/hooks";
 
 type Category = ItemListItem["category"];
 
@@ -167,21 +168,31 @@ export const AdEdit = () => {
     };
 
     const onSubmit = async (values: ItemUpdateIn) => {
-        if (!id) return;
+        try {
+            if (!id) return;
 
-        await apiClient.updateAd(id, values);
+            await apiClient.updateAd(id, values);
 
-        await Promise.all([
-            queryClient.invalidateQueries({ queryKey: ["ad", id] }),
-            queryClient.invalidateQueries({ queryKey: ["ad", id, "edit"] }),
-            queryClient.invalidateQueries({ queryKey: ["ads"] }),
-        ]);
+            // Invalidate all related queries to load fresh data
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ["ad", id] }),
+                queryClient.invalidateQueries({ queryKey: ["ad", id, "edit"] }),
+                queryClient.invalidateQueries({ queryKey: ["ads"] }),
+            ]);
 
-        if (draftKey) {
-            localStorage.removeItem(draftKey);
+            if (draftKey) {
+                localStorage.removeItem(draftKey);
+            }
+
+            toast.success("Изменения сохранены");
+            navigate(`/ads/${id}`);
+            
+        // eslint-disable-next-line
+        } catch (_error) {
+            toast.error(
+                "При попытке сохранить изменения произошла ошибка. Попробуйте ещё раз или зайдите позже.",
+            );
         }
-
-        navigate(`/ads/${id}`);
     };
 
     if (isLoading) {
