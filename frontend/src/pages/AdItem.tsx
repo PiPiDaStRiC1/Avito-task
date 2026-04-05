@@ -56,9 +56,9 @@ export const AdItem = () => {
         refetch,
     } = useQuery<ItemListItem>({
         queryKey: ["ad", id],
-        queryFn: () => apiClient.getAdById(id ?? ""),
-        enabled: Boolean(id),
+        queryFn: () => apiClient.getAdById(id!),
         staleTime: 10 * 60 * 1000,
+        enabled: Boolean(id),
     });
 
     if (isLoading) {
@@ -70,7 +70,7 @@ export const AdItem = () => {
             <ErrorState
                 title="Ошибка загрузки объявления"
                 message="Не получилось получить карточку объявления."
-                onRetry={() => void refetch()}
+                onRetry={refetch}
             />
         );
     }
@@ -79,7 +79,8 @@ export const AdItem = () => {
         return (
             <ErrorState
                 title="Объявление не найдено"
-                message="Похоже, объявление было удалено или ссылка неверная."
+                message="Похоже, объявление было удалено или ссылка неверна."
+                onRetry={refetch}
             />
         );
     }
@@ -90,7 +91,7 @@ export const AdItem = () => {
         .filter((entry) => !entry.value)
         .map((entry) => entry.label);
 
-    const needsRevision = !item.description || missingFields.length > 0;
+    const needsRevision = item.description === "" && item.needsRevision;
 
     return (
         <article className="flex flex-col gap-5 text-[var(--text-main)]">
@@ -146,6 +147,7 @@ export const AdItem = () => {
                                         {missingFields.map((field) => (
                                             <li key={field}>{field}</li>
                                         ))}
+                                        {item.description === "" && <li>Описание</li>}
                                     </ul>
                                 </div>
                             </div>
@@ -169,7 +171,7 @@ export const AdItem = () => {
                 </div>
 
                 <section className="space-y-3 xl:col-span-2">
-                    <h2 className="text-[22px] leading-none font-semibold tracking-[-0.01em]">
+                    <h2 className="text-xl leading-none font-semibold tracking-[-0.01em]">
                         Описание
                     </h2>
                     <p className="max-w-[470px] text-sm leading-5 text-[var(--text-main)]/90">

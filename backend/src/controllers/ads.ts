@@ -23,7 +23,7 @@ export const getAllAds = (req: Request, res: Response) => {
 };
 
 export const getAdById = (req: Request<{ id: string }>, res: Response) => {
-    const id = Number.parseInt(req.params["id"] ?? "", 10);
+    const id = parseInt(req.params["id"] ?? "");
     const item = (data as Item[]).find((ad) => ad.id === id);
 
     if (!item) {

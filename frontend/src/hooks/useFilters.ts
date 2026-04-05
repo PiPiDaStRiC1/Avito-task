@@ -69,6 +69,8 @@ export const useFilters = () => {
         };
     }, [q, sort, categories, onlyNeedsRevision, page]);
 
+    const setPage = (nextPage: number) => updateParams({ page: String(nextPage) });
+
     const onQueryChange = useCallback(
         (value: string) => updateParams({ q: value || null, page: "1" }),
         [updateParams],
@@ -92,13 +94,13 @@ export const useFilters = () => {
     };
 
     const onReset = () => {
-        updateParams({ categories: null, needsRevision: null, page: "1" });
+        updateParams({ q: null, categories: null, sort: null, needsRevision: null, page: "1" });
     };
 
     return {
         page,
         queryParams,
-        setPage: (nextPage: number) => updateParams({ page: String(nextPage) }),
+        setPage,
         searchProps: { query: q, sort, onQueryChange, onSortChange },
         asideFiltersProps: {
             selectedCategories: categories,

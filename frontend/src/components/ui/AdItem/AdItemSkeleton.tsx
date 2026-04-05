@@ -14,7 +14,7 @@ export const AdItemSkeleton = () => {
             </header>
 
             <section className="grid grid-cols-1 gap-6 xl:grid-cols-6">
-                <div className="min-h-[320px] animate-pulse rounded-sm bg-[var(--image-bg)] xl:col-span-2" />
+                <div className="min-h-[320px] animate-pulse rounded-sm bg-[var(--soft-border)] xl:col-span-2" />
                 <div className="space-y-6 xl:col-span-4">
                     <div className="h-28 w-full max-w-[512px] animate-pulse rounded-lg bg-[var(--warning-bg)]" />
                     <div className="space-y-3">
