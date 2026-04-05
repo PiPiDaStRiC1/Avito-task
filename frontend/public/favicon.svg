@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AI Avito">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff7a18" />
+      <stop offset="100%" stop-color="#ff4d00" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#g)" />
+  <path d="M20 46 31.8 17h4.4L48 46h-6.4l-2.3-6.3H28.5L26.2 46H20Zm10.3-11h8.7l-4.3-11.8L30.3 35Z" fill="#ffffff" />
+</svg>
