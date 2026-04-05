@@ -9,27 +9,15 @@ AI-ассистент для улучшения объявлений на Ави
 
 ## Быстрый старт
 
-1. Установите зависимости в корне проекта:
+1. Создайте файл `backend/.env` на основе `backend/.env.example`.
+
+2. Укажите в `backend/.env` свой `OPENROUTER_API_KEY` (чтобы его получить достаточно зарегистроваться на сайте `https://openrouter.ai/workspaces`)
+
+3. Установите все зависимости одной командой из корня проекта:
 
 ```bash
 npm install
 ```
-
-2. Установите зависимости для backend и frontend:
-
-```bash
-cd backend
-npm install
-cd ../frontend
-npm install
-cd ..
-```
-
-3. Настройте backend окружение:
-
-- Скопируйте `backend/.env.example` в `backend/.env`
-- Укажите `OPENROUTER_API_KEY`
-- При необходимости измените `OPENROUTER_BASE_URL` и `OPENROUTER_MODEL`
 
 4. Запустите приложение:
 
@@ -53,13 +41,24 @@ Backend:
 npm run dev:backend
 ```
 
+## Как устроена установка
+
+В корне проекта настроены npm workspaces:
+
+- `frontend`
+- `backend`
+
+Это означает, что `npm install` в корне подтягивает зависимости обоих приложений сразу. Отдельные `npm install` внутри `frontend` и `backend` больше не нужны.
+
 ## AI режим
 
-Проект настроен на OpenRouter API:
+Проект настроен на OpenRouter API. Я использовал модель DeepSeek V3:
 
 - `OPENROUTER_BASE_URL=https://openrouter.ai/api/v1`
-- `OPENROUTER_MODEL=deepseek/deepseek-chat-v3-0324:free`
+- `OPENROUTER_MODEL=deepseek/deepseek-chat`
 - `OPENROUTER_API_KEY=...`
+
+При желании можно переопределить `OPENROUTER_HTTP_REFERER` и `OPENROUTER_APP_TITLE` в `backend/.env`.
 
 Кнопки AI на странице редактирования показывают состояния:
 
@@ -74,3 +73,9 @@ npm run dev:backend
 - Использую OpenRouter как единый AI-шлюз для быстрого демонстрационного запуска.
 - Черновик формы редактирования хранится в `localStorage`.
 - Незаполненные дополнительные характеристики не блокируют сохранение формы.
+
+## Что важно для ревью
+
+- После форка достаточно выполнить `npm install` в корне репозитория.
+- Затем нужно создать `backend/.env` на основе `backend/.env.example` и добавить свой `OPENROUTER_API_KEY`.
+- Если ключа нет, UI приложения все равно откроется, но AI-кнопки не смогут делать запросы.

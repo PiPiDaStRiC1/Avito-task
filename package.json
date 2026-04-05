@@ -2,10 +2,14 @@
     "name": "ai-avito",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "private": true,
+    "workspaces": [
+        "backend",
+        "frontend"
+    ],
     "scripts": {
-        "dev:frontend": "cd frontend && npm run dev",
-        "dev:backend": "cd backend && npm run dev",
+        "dev:frontend": "npm run dev -w ./frontend",
+        "dev:backend": "npm run dev -w ./backend",
         "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
     },
     "keywords": [],

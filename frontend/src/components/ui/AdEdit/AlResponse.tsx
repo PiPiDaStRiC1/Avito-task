@@ -56,14 +56,14 @@ export const AIResponse = ({
                     type="button"
                     onClick={onApply}
                     disabled={!onApply || isLoading || isError || !content}
-                    className="h-8 rounded-md bg-[var(--accent)] px-3 text-sm font-medium text-white"
+                    className="cursor-pointer h-8 rounded-md bg-[var(--accent)] px-3 text-sm font-medium text-white"
                 >
                     Применить
                 </button>
                 <button
                     type="button"
                     onClick={onClose}
-                    className="h-8 rounded-md border border-[var(--soft-border)] px-3 text-sm text-[var(--text-main)]"
+                    className="cursor-pointer h-8 rounded-md border border-[var(--soft-border)] px-3 text-sm text-[var(--text-main)]"
                 >
                     Закрыть
                 </button>
@@ -73,7 +73,7 @@ export const AIResponse = ({
                 type="button"
                 onClick={onRetry}
                 disabled={isLoading || status === "idle"}
-                className="mt-3 inline-flex h-8 items-center gap-2 rounded-md bg-[var(--warning-bg)] px-3 text-sm text-[var(--warning-text)]"
+                className="cursor-pointer mt-3 inline-flex h-8 items-center gap-2 rounded-md bg-[var(--warning-bg)] px-3 text-sm text-[var(--warning-text)]"
             >
                 <RotateCcw size={14} />
                 Повторить запрос
