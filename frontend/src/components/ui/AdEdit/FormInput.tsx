@@ -14,7 +14,7 @@ interface FormInputProps {
 }
 
 const baseClassName =
-    "h-10 w-full rounded-lg border bg-white px-3 pr-8 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]";
+    "h-10 w-full rounded-lg border bg-[var(--card-bg)] px-3 pr-8 text-sm text-[var(--input-text)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]";
 
 export const FormInput = ({
     registerProps,

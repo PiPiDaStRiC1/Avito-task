@@ -34,20 +34,20 @@ export const AsideFilters = ({
 
     return (
         <aside className="w-full max-w-full md:max-w-xs  flex flex-col gap-3">
-            <div className="bg-white rounded-lg p-3">
-                <h2 className="text-lg font-medium">Фильтры</h2>
+            <div className="rounded-lg border border-[var(--soft-border)] bg-[var(--panel-bg)] p-3 text-[var(--text-main)]">
+                <h2 className="text-lg font-medium text-[var(--text-main)]">Фильтры</h2>
                 <div className="flex flex-col gap-3">
                     <div className="select-none flex justify-between items-center">
-                        <h3>Категория</h3>
+                        <h3 className="text-[var(--text-main)]">Категория</h3>
                         {toggleFilters ? (
                             <ArrowUpIcon
-                                className="cursor-pointer"
+                                className="cursor-pointer text-[var(--text-muted)]"
                                 size={16}
                                 onClick={() => setToggleFilters(false)}
                             />
                         ) : (
                             <ArrowDownIcon
-                                className="cursor-pointer"
+                                className="cursor-pointer text-[var(--text-muted)]"
                                 size={16}
                                 onClick={() => setToggleFilters(true)}
                             />
@@ -58,7 +58,7 @@ export const AsideFilters = ({
                             {categories.map((category) => (
                                 <label
                                     key={category.id}
-                                    className="cursor-pointer select-none flex items-center gap-2"
+                                    className="cursor-pointer select-none flex items-center gap-2 text-[var(--text-main)]"
                                 >
                                     <input
                                         type="checkbox"
@@ -71,10 +71,10 @@ export const AsideFilters = ({
                         </div>
                     )}
                 </div>
-                <div className="w-full h-0.5 my-3 bg-gray-200" />
+                <div className="my-3 h-0.5 w-full bg-[var(--soft-border)]" />
 
                 <div className="flex justify-between gap-5">
-                    <h3 className="text-md max-w-[10rem] font-medium">
+                    <h3 className="text-md max-w-[10rem] font-medium text-[var(--text-main)]">
                         Только требующие доработок
                     </h3>
                     <button
@@ -100,7 +100,7 @@ export const AsideFilters = ({
                 disabled={!hasActiveFilters}
                 className={`w-full p-3 rounded-md transition-colors ${
                     hasActiveFilters
-                        ? "cursor-pointer bg-white text-[var(--text-main)]"
+                        ? "cursor-pointer border border-[var(--soft-border)] bg-[var(--panel-bg)] text-[var(--text-main)]"
                         : "cursor-default bg-[var(--soft-border)] text-[var(--text-muted)]"
                 }`}
             >

@@ -1,8 +1,17 @@
+import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Search, AsideFilters, AdCard, AdsSkeleton, ErrorState } from "@/components";
 import { useAds } from "@/hooks";
 
+type ThemeMode = "light" | "dark";
+const THEME_STORAGE_KEY = "ai-avito-theme";
+
 export const Ads = () => {
+    const [theme, setTheme] = useState<ThemeMode>(() => {
+        const saved = localStorage.getItem(THEME_STORAGE_KEY);
+        return saved === "dark" ? "dark" : "light";
+    });
+
     const {
         page,
         pages,
@@ -17,9 +26,27 @@ export const Ads = () => {
         setPage,
     } = useAds();
 
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme((current) => (current === "light" ? "dark" : "light"));
+    };
+
     return (
         <div className="flex flex-col gap-5">
-            <h1 className="text-xl text-black font-medium">Мои объявления</h1>
+            <div className="flex items-center justify-between gap-3">
+                <h1 className="text-xl font-medium text-[var(--text-main)]">Мои объявления</h1>
+                <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="cursor-pointer rounded-md border border-[var(--soft-border)] bg-[var(--panel-bg)] px-3 py-1.5 text-sm font-medium text-[var(--text-main)]"
+                >
+                    {theme === "light" ? "Темная тема" : "Светлая тема"}
+                </button>
+            </div>
             <Search
                 gridLayout={gridLayout}
                 setGridLayout={setGridLayout}

@@ -108,7 +108,7 @@ export const AutoParamsFields = ({
                 <select
                     {...transmissionRegister}
                     onChange={transmissionRegister.onChange}
-                    className={`h-10 w-full rounded-lg border bg-white px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)] ${
+                    className={`h-10 w-full rounded-lg border bg-[var(--card-bg)] px-3 text-sm text-[var(--input-text)] outline-none focus:border-[var(--accent)] ${
                         typeof transmissionValue === "string" && transmissionValue
                             ? "border-[var(--soft-border)]"
                             : "border-orange-400"

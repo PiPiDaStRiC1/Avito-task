@@ -39,7 +39,7 @@ export const ElectronicsParamsFields = ({
                 <select
                     {...typeRegister}
                     onChange={typeRegister.onChange}
-                    className={`h-10 w-full rounded-lg border bg-white px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)] ${
+                    className={`h-10 w-full rounded-lg border bg-[var(--card-bg)] px-3 text-sm text-[var(--input-text)] outline-none focus:border-[var(--accent)] ${
                         typeof typeValue === "string" && typeValue
                             ? "border-[var(--soft-border)]"
                             : "border-orange-400"
@@ -100,7 +100,7 @@ export const ElectronicsParamsFields = ({
                 <select
                     {...conditionRegister}
                     onChange={conditionRegister.onChange}
-                    className={`h-10 w-full rounded-lg border bg-white px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)] ${
+                    className={`h-10 w-full rounded-lg border bg-[var(--card-bg)] px-3 text-sm text-[var(--input-text)] outline-none focus:border-[var(--accent)] ${
                         typeof conditionValue === "string" && conditionValue
                             ? "border-[var(--soft-border)]"
                             : "border-orange-400"

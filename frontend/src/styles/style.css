@@ -6,6 +6,7 @@
     --card-bg: #fcfcfd;
     --text-main: #303338;
     --text-muted: #7b8089;
+    --input-text: #48505c;
     --soft-border: #e3e4e8;
 
     --accent: #4b9fff;
@@ -26,6 +27,33 @@
     --toggle-off: #d2d5da;
 }
 
+:root[data-theme="dark"] {
+    --main-bg: #171a1f;
+    --panel-bg: #1f242c;
+    --card-bg: #232a33;
+    --text-main: #e8ebf0;
+    --text-muted: #a8b0bb;
+    --input-text: #bac3cf;
+    --soft-border: #2f3742;
+
+    --accent: #66a8ff;
+    --accent-soft: #1e2b3d;
+
+    --bg-gray: #7c8798;
+
+    --warning-bg: #3f3321;
+    --warning-border: #8e6a3a;
+    --warning-text: #ffc168;
+
+    --chip-bg: #2a313b;
+    --chip-border: #3b4552;
+
+    --image-bg: #2a313b;
+    --image-stroke: #586273;
+
+    --toggle-off: #4a5565;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -35,6 +63,7 @@ body {
     background-color: var(--main-bg);
     color: var(--text-main);
     font-family: "Manrope", "Segoe UI", sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 button,

@@ -104,7 +104,7 @@ export const Search = ({
                     id="search_params"
                     value={sort}
                     onChange={(event) => onSortChange(event.target.value)}
-                    className="h-9 rounded-lg border border-[var(--soft-border)] bg-white px-3 text-sm text-[var(--text-main)] focus:border-[var(--accent)] focus:outline-none"
+                    className="h-9 rounded-lg border border-[var(--soft-border)] bg-[var(--card-bg)] px-3 text-sm text-[var(--input-text)] focus:border-[var(--accent)] focus:outline-none"
                 >
                     {searchParams.map((param) => (
                         <option key={param.value} value={param.value}>
