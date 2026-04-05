@@ -1,4 +1,4 @@
-import { AITip, AIResponse } from "@/components";
+import { AITip } from "@/components";
 import type { ReactNode } from "react";
 
 type AiFieldId = "price" | "description";
@@ -43,11 +43,6 @@ export const FormField = ({
                             isActive={isAiOpen}
                         />
                     </div>
-                    {isAiOpen && (
-                        <div className="absolute -translate-y-[calc(100%+0.5rem)]">
-                            <AIResponse />
-                        </div>
-                    )}
                 </div>
             ) : (
                 <div className="hidden lg:block" />

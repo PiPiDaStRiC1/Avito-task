@@ -50,7 +50,9 @@ export const RealEstateParamsFields = ({
 
             <FormField label="Адрес" activeAiField={activeAiField} onToggleAi={onToggleAi}>
                 <FormInput
-                    registerProps={register("params.address")}
+                    registerProps={register("params.address", {
+                        setValueAs: (v: string) => (v.trim() === "" ? undefined : v.trim()),
+                    })}
                     currentValue={typeof addressValue === "string" ? addressValue : ""}
                     onClear={() => {
                         setValue("params.address", undefined, {

@@ -35,7 +35,9 @@ export const AutoParamsFields = ({
         <>
             <FormField label="Бренд" activeAiField={activeAiField} onToggleAi={onToggleAi}>
                 <FormInput
-                    registerProps={register("params.brand")}
+                    registerProps={register("params.brand", {
+                        setValueAs: (v: string) => (v.trim() === "" ? undefined : v.trim()),
+                    })}
                     currentValue={typeof brandValue === "string" ? brandValue : ""}
                     onClear={() => {
                         setValue("params.brand", undefined, {
@@ -55,7 +57,9 @@ export const AutoParamsFields = ({
 
             <FormField label="Модель" activeAiField={activeAiField} onToggleAi={onToggleAi}>
                 <FormInput
-                    registerProps={register("params.model")}
+                    registerProps={register("params.model", {
+                        setValueAs: (v: string) => (v.trim() === "" ? undefined : v.trim()),
+                    })}
                     currentValue={typeof modelValue === "string" ? modelValue : ""}
                     onClear={() => {
                         setValue("params.model", undefined, {

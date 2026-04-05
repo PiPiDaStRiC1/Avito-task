@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef, type ChangeEvent } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AITip, AIResponse, AdEditSkeleton, ErrorState, FormField, FormInput } from "@/components";
 import { apiClient } from "@/lib/api";
 import { ItemUpdateInSchema, type ItemUpdateIn } from "@shared/schemas";
@@ -14,8 +14,8 @@ import type {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { AutoParamsFields, ElectronicsParamsFields, RealEstateParamsFields } from "@/components/ui";
+import { useAI } from "@/hooks";
 
-type AiFieldId = "price" | "description";
 type Category = ItemListItem["category"];
 
 type CategoryMeta = { heading: string };
@@ -28,7 +28,8 @@ const CATEGORY_META: Record<Category, CategoryMeta> = {
 
 export const AdEdit = () => {
     const { id } = useParams<{ id: string }>();
-    const [activeAiField, setActiveAiField] = useState<AiFieldId | null>(null);
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const isDraftHydratedRef = useRef(false);
 
     const {
@@ -55,8 +56,21 @@ export const AdEdit = () => {
     const formValues = useWatch({ control });
 
     const draftKey = id ? `ad-edit-draft:${id}` : null;
+    const aiStorageKey = id ? `ad-edit-ai-state:${id}` : null;
     const currentCategory = formValues.category ?? item?.category ?? "electronics";
     const categoryMeta = CATEGORY_META[currentCategory];
+
+    const toAiPayload = () => ({
+        category: currentCategory,
+        title: formValues.title ?? "",
+        description: formValues.description ?? "",
+        price: formValues.price ?? 0,
+        params: (formValues.params as Record<string, unknown> | undefined) ?? {},
+    });
+
+    const { activeAiField, aiState, requestAiSuggestion, handleToggleAi, closeAiPanel } = useAI({
+        storageKey: aiStorageKey,
+    });
 
     useEffect(() => {
         if (!item || !draftKey) return;
@@ -83,7 +97,9 @@ export const AdEdit = () => {
 
         const readText = (key: string) => {
             const value = rawParams[key];
-            return typeof value === "string" ? value : undefined;
+            if (typeof value !== "string") return undefined;
+            const normalized = value.trim();
+            return normalized === "" ? undefined : normalized;
         };
 
         const readNumber = (key: string) => {
@@ -150,12 +166,22 @@ export const AdEdit = () => {
         setValue("params", {}, { shouldDirty: true, shouldValidate: true });
     };
 
-    const onSubmit = () => {
-        // Сохранение на backend будет добавлено позже.
-    };
+    const onSubmit = async (values: ItemUpdateIn) => {
+        if (!id) return;
 
-    const handleToggleAi = (fieldId: AiFieldId) => {
-        setActiveAiField((currentField) => (currentField === fieldId ? null : fieldId));
+        await apiClient.updateAd(id, values);
+
+        await Promise.all([
+            queryClient.invalidateQueries({ queryKey: ["ad", id] }),
+            queryClient.invalidateQueries({ queryKey: ["ad", id, "edit"] }),
+            queryClient.invalidateQueries({ queryKey: ["ads"] }),
+        ]);
+
+        if (draftKey) {
+            localStorage.removeItem(draftKey);
+        }
+
+        navigate(`/ads/${id}`);
     };
 
     if (isLoading) {
@@ -208,7 +234,7 @@ export const AdEdit = () => {
                     <FormField
                         label="Категория"
                         activeAiField={activeAiField}
-                        onToggleAi={handleToggleAi}
+                        onToggleAi={(fieldId) => handleToggleAi(fieldId, toAiPayload())}
                     >
                         <select
                             value={currentCategory}
@@ -230,7 +256,7 @@ export const AdEdit = () => {
                         label="Название"
                         required
                         activeAiField={activeAiField}
-                        onToggleAi={handleToggleAi}
+                        onToggleAi={(fieldId) => handleToggleAi(fieldId, toAiPayload())}
                     >
                         <FormInput
                             registerProps={titleRegister}
@@ -251,7 +277,7 @@ export const AdEdit = () => {
                         aiMessage="Узнать рыночную цену"
                         aiFieldId="price"
                         activeAiField={activeAiField}
-                        onToggleAi={handleToggleAi}
+                        onToggleAi={(fieldId) => handleToggleAi(fieldId, toAiPayload())}
                     >
                         <FormInput
                             registerProps={priceRegister}
@@ -263,6 +289,35 @@ export const AdEdit = () => {
                             placeholder="Введите цену"
                             error={priceError}
                         />
+
+                        {activeAiField === "price" && (
+                            <div className="mt-2">
+                                <AIResponse
+                                    title="Рекомендация по цене"
+                                    status={
+                                        aiState.loadingField === "price"
+                                            ? "loading"
+                                            : aiState.errorByField.price
+                                              ? "error"
+                                              : aiState.contentByField.price
+                                                ? "success"
+                                                : "idle"
+                                    }
+                                    content={aiState.contentByField.price ?? ""}
+                                    error={aiState.errorByField.price ?? null}
+                                    onRetry={() => requestAiSuggestion("price", toAiPayload())}
+                                    onClose={closeAiPanel}
+                                    onApply={() => {
+                                        if (typeof aiState.suggestedPrice !== "number") return;
+                                        setValue("price", aiState.suggestedPrice, {
+                                            shouldDirty: true,
+                                            shouldValidate: true,
+                                        });
+                                        closeAiPanel();
+                                    }}
+                                />
+                            </div>
+                        )}
                     </FormField>
                 </div>
 
@@ -287,7 +342,7 @@ export const AdEdit = () => {
                                 }
                                 paramErrors={paramsErrors}
                                 activeAiField={activeAiField}
-                                onToggleAi={handleToggleAi}
+                                onToggleAi={(fieldId) => handleToggleAi(fieldId, toAiPayload())}
                             />
                         )}
 
@@ -301,7 +356,7 @@ export const AdEdit = () => {
                                 }
                                 paramErrors={paramsErrors}
                                 activeAiField={activeAiField}
-                                onToggleAi={handleToggleAi}
+                                onToggleAi={(fieldId) => handleToggleAi(fieldId, toAiPayload())}
                             />
                         )}
 
@@ -316,7 +371,7 @@ export const AdEdit = () => {
                                 }
                                 paramErrors={paramsErrors}
                                 activeAiField={activeAiField}
-                                onToggleAi={handleToggleAi}
+                                onToggleAi={(fieldId) => handleToggleAi(fieldId, toAiPayload())}
                             />
                         )}
                     </div>
@@ -349,12 +404,40 @@ export const AdEdit = () => {
                         <div className="w-fit lg:pt-1">
                             <AITip
                                 message="Улучшить описание"
-                                onClick={() => handleToggleAi("description")}
+                                onClick={() => handleToggleAi("description", toAiPayload())}
                                 isActive={activeAiField === "description"}
                             />
                             {activeAiField === "description" && (
                                 <div className="mt-2">
-                                    <AIResponse />
+                                    <AIResponse
+                                        title="Улучшенное описание"
+                                        status={
+                                            aiState.loadingField === "description"
+                                                ? "loading"
+                                                : aiState.errorByField.description
+                                                  ? "error"
+                                                  : aiState.contentByField.description
+                                                    ? "success"
+                                                    : "idle"
+                                        }
+                                        content={aiState.contentByField.description ?? ""}
+                                        error={aiState.errorByField.description ?? null}
+                                        onRetry={() =>
+                                            requestAiSuggestion("description", toAiPayload())
+                                        }
+                                        onClose={closeAiPanel}
+                                        onApply={() => {
+                                            const nextDescription =
+                                                aiState.contentByField.description;
+                                            if (!nextDescription) return;
+
+                                            setValue("description", nextDescription, {
+                                                shouldDirty: true,
+                                                shouldValidate: true,
+                                            });
+                                            closeAiPanel();
+                                        }}
+                                    />
                                 </div>
                             )}
                         </div>

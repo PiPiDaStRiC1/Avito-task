@@ -54,7 +54,9 @@ export const ElectronicsParamsFields = ({
 
             <FormField label="Бренд" activeAiField={activeAiField} onToggleAi={onToggleAi}>
                 <FormInput
-                    registerProps={register("params.brand")}
+                    registerProps={register("params.brand", {
+                        setValueAs: (v: string) => (v.trim() === "" ? undefined : v.trim()),
+                    })}
                     currentValue={typeof brandValue === "string" ? brandValue : ""}
                     onClear={() => {
                         setValue("params.brand", undefined, {
@@ -74,7 +76,9 @@ export const ElectronicsParamsFields = ({
 
             <FormField label="Модель" activeAiField={activeAiField} onToggleAi={onToggleAi}>
                 <FormInput
-                    registerProps={register("params.model")}
+                    registerProps={register("params.model", {
+                        setValueAs: (v: string) => (v.trim() === "" ? undefined : v.trim()),
+                    })}
                     currentValue={typeof modelValue === "string" ? modelValue : ""}
                     onClear={() => {
                         setValue("params.model", undefined, {
@@ -110,7 +114,9 @@ export const ElectronicsParamsFields = ({
 
             <FormField label="Цвет" activeAiField={activeAiField} onToggleAi={onToggleAi}>
                 <FormInput
-                    registerProps={register("params.color")}
+                    registerProps={register("params.color", {
+                        setValueAs: (v: string) => (v.trim() === "" ? undefined : v.trim()),
+                    })}
                     currentValue={typeof colorValue === "string" ? colorValue : ""}
                     onClear={() => {
                         setValue("params.color", undefined, {

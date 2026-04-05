@@ -91,7 +91,7 @@ export const AdItem = () => {
         .filter((entry) => !entry.value)
         .map((entry) => entry.label);
 
-    const needsRevision = item.description === "" && item.needsRevision;
+    const needsRevision = item.needsRevision;
 
     return (
         <article className="flex flex-col gap-5 text-[var(--text-main)]">
