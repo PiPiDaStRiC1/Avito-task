@@ -25,6 +25,27 @@ export const AIResponse = ({
     const isSuccess = status === "success";
     const isError = status === "error";
 
+    if (isError) {
+        return (
+            <div className="mt-2 rounded-md border border-[#e8c8c8] bg-[#f5e2e2] px-4 py-3">
+                <p className="text-sm font-semibold text-[#b42720]">
+                    Произошла ошибка при запросе к AI
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[var(--text-main)]">
+                    Попробуйте повторить запрос или закройте уведомление
+                </p>
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="mt-3 h-8 rounded-md border border-[#e3b0b0] bg-[#f1b8b8] px-1 text-base text-[var(--text-main)]"
+                >
+                    Закрыть
+                </button>
+                {error && <p className="mt-2 text-xs text-[var(--text-muted)]">{error}</p>}
+            </div>
+        );
+    }
+
     return (
         <div className="rounded-lg border border-[var(--soft-border)] bg-white px-4 py-3 shadow-lg">
             <p className="text-sm font-semibold text-[var(--text-main)]">{title}:</p>
@@ -41,10 +62,6 @@ export const AIResponse = ({
                 </p>
             )}
 
-            {!isLoading && isError && (
-                <p className="mt-2 text-sm leading-5 text-red-600">{error}</p>
-            )}
-
             {!isLoading && isSuccess && (
                 <p className="mt-2 whitespace-pre-wrap text-sm leading-5 text-black">
                     {content || "Пока нет ответа"}
@@ -55,7 +72,7 @@ export const AIResponse = ({
                 <button
                     type="button"
                     onClick={onApply}
-                    disabled={!onApply || isLoading || isError || !content}
+                    disabled={!onApply || isLoading || !content}
                     className="cursor-pointer h-8 rounded-md bg-[var(--accent)] px-3 text-sm font-medium text-white"
                 >
                     Применить
