@@ -54,11 +54,11 @@ export const AdEdit = () => {
         enabled: Boolean(id),
     });
 
-    const formValues = useWatch({ control });
+    const formValues = useWatch<ItemUpdateIn>({ control });
 
     const draftKey = id ? `ad-edit-draft:${id}` : null;
     const aiStorageKey = id ? `ad-edit-ai-state:${id}` : null;
-    const currentCategory = formValues.category ?? item?.category ?? "electronics";
+    const currentCategory: Category = formValues.category ?? item?.category ?? "electronics";
     const categoryMeta = CATEGORY_META[currentCategory];
 
     const toAiPayload = () => ({

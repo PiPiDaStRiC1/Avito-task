@@ -2,6 +2,7 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "module": "es6",
+        "moduleResolution": "bundler",
         "target": "esnext",
         "lib": ["esnext"],
 
@@ -13,8 +14,6 @@
 
         "noUncheckedIndexedAccess": true,
         "exactOptionalPropertyTypes": true,
-
-        "ignoreDeprecations": "6.0",
 
         "strict": true,
         "verbatimModuleSyntax": true,

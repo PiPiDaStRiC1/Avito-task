@@ -37,7 +37,7 @@ export const AIResponse = ({
                 <button
                     type="button"
                     onClick={onClose}
-                    className="mt-3 h-8 rounded-md border border-[#e3b0b0] bg-[#f1b8b8] px-1 text-base text-[var(--text-main)]"
+                    className="cursor-pointer mt-3 h-8 rounded-md border border-[#e3b0b0] bg-[#f1b8b8] px-1 text-base text-[var(--text-main)]"
                 >
                     Закрыть
                 </button>
