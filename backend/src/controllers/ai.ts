@@ -101,7 +101,7 @@ const parsePriceResponse = (rawText: string) => {
     const fallbackPrice = Number(fallbackRaw.replace(/\s+/g, "").replace(/,/g, "."));
 
     return {
-        price: Number.isFinite(fallbackPrice) && fallbackPrice != null ? fallbackPrice : null,
+        price: isFinite(fallbackPrice) && fallbackPrice != null ? fallbackPrice : null,
         reason: text.trim().slice(0, 220),
     };
 };

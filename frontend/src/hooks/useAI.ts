@@ -125,7 +125,7 @@ export const useAI = ({ storageKey }: UseAIOptions) => {
                 !aiState.contentByField[nextField] &&
                 !aiState.errorByField[nextField]
             ) {
-                void requestAiSuggestion(nextField, payload);
+                requestAiSuggestion(nextField, payload);
             }
 
             return nextField;
